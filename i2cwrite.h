@@ -20,6 +20,8 @@
 #include <QObject> //I'm compiling under QT environement - Skip this in other environment
 #include <QDebug>  //I'm compiling under QT environement - Skip this in other environment
 #include <QThread> //I'm compiling under QT environement - Skip this in other environment
+#include <time.h>  //I'm compiling under QT environement - Skip this in other environment
+
 
 enum I2WriteState{
     I2CWRITE_IDLE = 0,              //No write operation are currently running
@@ -69,6 +71,9 @@ private:
     I2CDriver   m_Driver;      //Simulated MCU I2C Driver
     bool        m_WriteDone;
     bool        m_WriteFail;
+
+    clock_t     m_start;       //I'm compiling under QT environement - Skip this in other environment
+    clock_t     m_end;         //I'm compiling under QT environement - Skip this in other environment
 
 signals:                       //To remove if environment different from QT
     void m_stateChanged(int);  //To remove if environment different from QT
