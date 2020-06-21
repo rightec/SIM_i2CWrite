@@ -34,3 +34,20 @@ void myCallback_2 (bool _retVal)
     bRetVal = true;
 
 }
+
+
+void myCallback_3 (bool _retVal)
+{
+    bool bRetVal = _retVal;
+
+    qDebug() << "myCallback_3";
+
+    if (bRetVal == true){
+        g_i2cWriteLayer->I2CWriteSetWriteDoneFlag(true);
+    }else{
+        g_i2cWriteLayer->I2CWriteSetWriteFailFlag(true);
+    }
+
+    bRetVal = true;
+
+}

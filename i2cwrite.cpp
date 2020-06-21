@@ -17,17 +17,20 @@
 I2CWrite::I2CWrite()
 {
     //Init Section
-    I2CWriteReset();
+    I2CWriteReset();    
 }
 
 
 I2WriteState I2CWrite::I2CWriteRun()
 {
+    double dI2CWrite_time_running = 0.0;
     while (m_State != I2CWRITE_BUS_FAIL){
         qDebug() << "I2CWriteRun STATE is" << m_State; //I'm compiling under QT environement - Skip this in other environment
         if (m_ForceClose == false){
             switch(m_State){
             case I2CWRITE_IDLE:
+                m_end = 0;
+                m_start = 0;
                 if (I2CWriteGetWriteStartFlag() == true){
                     //We have a request accepted
                     I2CWriteSetState(I2CWRITE_REQUEST_TO_WRITE);
@@ -38,18 +41,29 @@ I2WriteState I2CWrite::I2CWriteRun()
                 break;
             case I2CWRITE_REQUEST_TO_WRITE:
                 I2CWriteSetState(I2CWRITE_WRITE_IN_PROGRESS);
+                //use of this clock() is typical of QT
+                m_start = clock();  //Start measuring
                 m_Driver.I2C_Write(m_address, m_data, m_data_length,m_callback);
                 break;
             case I2CWRITE_WRITE_IN_PROGRESS:
-                if (I2CWriteGetWriteDoneFlag() == true){
-                    I2CWriteSetState(I2CWRITE_WRITE_OK);
-                }else{
-                    if (I2CWriteGetWriteFailFlag() == true){
-                        I2CWriteSetState(I2CWRITE_WRITE_FAIL);
+                //use of this clock() is typical of QT
+                m_end = clock();
+                dI2CWrite_time_running = ((m_end-m_start));
+                if (dI2CWrite_time_running < I2C_WRITE_FAIL_TIMEOUT){
+                    //Timeot not expired
+                    if (I2CWriteGetWriteDoneFlag() == true){
+                        I2CWriteSetState(I2CWRITE_WRITE_OK);
                     }else{
-                        //Nothing to do
-                        asm("nop");
+                        if (I2CWriteGetWriteFailFlag() == true){
+                            I2CWriteSetState(I2CWRITE_WRITE_FAIL);
+                        }else{
+                            //Nothing to do
+                            asm("nop");
+                        }
                     }
+                }else{
+                    //timeout expired - Declare it as failed
+                    I2CWriteSetState(I2CWRITE_WRITE_FAIL);
                 }
                 break;
             case I2CWRITE_WRITE_OK:
@@ -216,3 +230,22 @@ bool I2CWrite::I2CWriteGetWriteFailFlag()
 {
     return m_WriteFail;
 }
+
+/*!
+ * \brief I2CWrite::I2CWriteSetSimFlag
+ * \param _flag: simulate the MC failure
+ */
+void I2CWrite::I2CWriteSetSimFlag(bool _flag)
+{
+    m_FailSimFlag = _flag;
+}
+
+/*!
+ * \brief I2CWrite::I2CWriteGetSimFlag
+ * \return
+ */
+bool I2CWrite::I2CWriteGetSimFlag()
+{
+    return m_FailSimFlag;
+}
+

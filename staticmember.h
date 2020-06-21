@@ -6,6 +6,7 @@
 
 void myCallback_1 (bool _retVal);
 void myCallback_2 (bool _retVal);
+void myCallback_3 (bool _retVal);
 
 extern I2CWrite *g_i2cWriteLayer;
 

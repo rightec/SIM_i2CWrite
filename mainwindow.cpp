@@ -115,6 +115,7 @@ void MainWindow::on_btn_RunBus_clicked()
 
    ui->btn_StartTask_1->setStyleSheet(m_BackGroundWhite);
    ui->btn_StartTask_2->setStyleSheet(m_BackGroundWhite);
+   ui->btn_StartTask_3->setStyleSheet(m_BackGroundWhite);
 }
 
 /*!
@@ -132,6 +133,7 @@ void MainWindow::on_btn_StopBus_clicked()
 
     ui->btn_StartTask_1->setStyleSheet(m_BackGroundGray);
     ui->btn_StartTask_2->setStyleSheet(m_BackGroundGray);
+    ui->btn_StartTask_3->setStyleSheet(m_BackGroundGray);
 
 
 }
@@ -295,6 +297,26 @@ void MainWindow::on_btn_StartTask_2_clicked()
         ui->btn_StartTask_2->setStyleSheet(m_BackGroundGreen);
     }else{
         ui->btn_StartTask_2->setStyleSheet(m_BackGroundRed);
+    }
+
+}
+
+void MainWindow::on_btn_StartTask_3_clicked()
+{
+    uint8_t address = 0xAA;
+    uint8_t* data = new (uint8_t);
+    size_t data_length = 10;
+    bool bStartTask = false;
+    void (*callback)(bool) = myCallback_3;
+
+    g_i2cWriteLayer->I2CWriteSetSimFlag(true); //Simulatig MCU callback failure
+    g_i2cWriteLayer->I2CWriteSetWriteTime(I2C_TASK3_LASTING_TIME);   //Nuumber never reached
+    bStartTask = g_i2cWriteLayer->I2CWriteIsFree(address, data, data_length, callback);
+
+    if (bStartTask == true){
+        ui->btn_StartTask_3->setStyleSheet(m_BackGroundGreen);
+    }else{
+        ui->btn_StartTask_3->setStyleSheet(m_BackGroundRed);
     }
 
 }

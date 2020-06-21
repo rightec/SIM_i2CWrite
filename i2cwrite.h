@@ -33,9 +33,11 @@ enum I2WriteState{
     I2CWRITE_END
 };
 
-#define I2C_STANDARD_SWITCH_TIME  1000                          //In milliseconds I'm compiling under QT environement - Skip this in other environment
-#define I2C_TASK1_LASTING_TIME    5*I2C_STANDARD_SWITCH_TIME    //In milliseconds I'm compiling under QT environement - Skip this in other environment
-#define I2C_TASK2_LASTING_TIME    3*I2C_STANDARD_SWITCH_TIME    //In milliseconds I'm compiling under QT environement - Skip this in other environment
+#define I2C_WRITE_FAIL_TIMEOUT    7000                           //In milliseconds
+#define I2C_STANDARD_SWITCH_TIME  1000                           //In milliseconds I'm compiling under QT environement - Skip this in other environment
+#define I2C_TASK1_LASTING_TIME    5*I2C_STANDARD_SWITCH_TIME     //In milliseconds I'm compiling under QT environement - Skip this in other environment
+#define I2C_TASK2_LASTING_TIME    3*I2C_STANDARD_SWITCH_TIME     //In milliseconds I'm compiling under QT environement - Skip this in other environment
+#define I2C_TASK3_LASTING_TIME    10*I2C_STANDARD_SWITCH_TIME    //In milliseconds I'm compiling under QT environement - Skip this in other environment
 
 //class I2CWrite
 class I2CWrite : public QObject //I'm compiling under QT environement - Use previous line in other environment
@@ -52,9 +54,11 @@ public:
     void I2CWriteSetWriteDoneFlag(bool _flag);
     void I2CWriteSetWriteStartFlag(bool _flag);
     void I2CWriteSetWriteFailFlag(bool _flag);
+    void I2CWriteSetSimFlag(bool _flag);    //Flag to simulate a failure - To skip in real embedded
     bool I2CWriteGetWriteDoneFlag();
     bool I2CWriteGetWriteStartFlag();
     bool I2CWriteGetWriteFailFlag();
+    bool I2CWriteGetSimFlag();              //Flag to simulate a failure - To skip in real embedded
     void I2CWriteSetWriteTime(uint32_t _setTime); //Used only for simulation - To remove if environment different from QT
 
 public slots:   //To remove if environment different from QT
@@ -68,12 +72,14 @@ private:
     uint8_t*    m_data;
     size_t      m_data_length;
     bool        m_ForceClose;
-    I2CDriver   m_Driver;      //Simulated MCU I2C Driver
+    I2CDriver   m_Driver;        //Simulated MCU I2C Driver
+
     bool        m_WriteDone;
     bool        m_WriteFail;
 
     clock_t     m_start;       //I'm compiling under QT environement - Skip this in other environment
     clock_t     m_end;         //I'm compiling under QT environement - Skip this in other environment
+    bool        m_FailSimFlag; //Flag to simulate a failure - To skip in real embedded
 
 signals:                       //To remove if environment different from QT
     void m_stateChanged(int);  //To remove if environment different from QT

@@ -35,6 +35,8 @@ private slots:
 
     void on_btn_StartTask_2_clicked();
 
+    void on_btn_StartTask_3_clicked();
+
 private:
     Ui::MainWindow *ui;
 

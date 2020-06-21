@@ -575,6 +575,9 @@ background-color: rgb(255,255,255);</string>
       <height>28</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Spawn a task with priority 2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
     <property name="text">
      <string>START TASK 1</string>
     </property>
@@ -588,8 +591,27 @@ background-color: rgb(255,255,255);</string>
       <height>28</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Spawn a task with priority 2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
     <property name="text">
      <string>START TASK 2</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_StartTask_3">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>360</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Task used to simulate failure in MCI I2C driver callback&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="text">
+     <string>START TASK 3</string>
     </property>
    </widget>
   </widget>
